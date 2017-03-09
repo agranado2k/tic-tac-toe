@@ -1,29 +1,60 @@
+class GameIO
+  def draw_board(board)
+    output board_template(board)
+  end
+
+  def board_template(board)
+    " #{board[0]} | #{board[1]} | #{board[2]} \n===+===+===\n #{board[3]} | #{board[4]} | #{board[5]} \n===+===+===\n #{board[6]} | #{board[7]} | #{board[8]} \n"
+  end
+
+  def ask_human_for_action
+    output "Enter [0-8]:"
+  end
+
+  def game_over_message
+    output "Game over"
+  end
+
+  def output(content)
+    puts content
+  end
+
+  def input
+    gets.chomp
+  end
+end
+
 class Game
-  def initialize
+  attr_reader :board, :game_io
+
+  def initialize(game_io=GameIO.new)
     @board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
     @com = "X" # the computer's marker
     @hum = "O" # the user's marker
+    @game_io = game_io
   end
 
   def start_game
     # start by printing the board
-    puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
-    puts "Enter [0-8]:"
+    game_io.draw_board(@board)
+    game_io.ask_human_for_action
+
     # loop through until the game was won or tied
     until game_is_over(@board) || tie(@board)
-      get_human_spot
+      get_human_spot(game_io.input)
       if !game_is_over(@board) && !tie(@board)
         eval_board
       end
-      puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
+      game_io.draw_board(@board)
     end
-    puts "Game over"
+    
+    game_io.game_over_message
   end
 
-  def get_human_spot
+  def get_human_spot(choise=nil)
     spot = nil
     until spot
-      spot = gets.chomp.to_i
+      spot = choise.to_i
       if @board[spot] != "X" && @board[spot] != "O"
         @board[spot] = @hum
       else
@@ -100,5 +131,5 @@ class Game
 
 end
 
-# game = Game.new
-# game.start_game
+game = Game.new
+game.start_game
