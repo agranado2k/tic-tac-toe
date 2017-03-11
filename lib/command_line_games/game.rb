@@ -1,24 +1,25 @@
 module CommandLineGames
   class Game
-    attr_reader :board, :game_input_output
+    attr_reader :game_input_output, :current_board
 
-    def initialize(game_input_output=GameIO.new)
-      @board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+    def initialize(game_io, board)
+      @current_board = board
+      @game_input_output = game_io
+
       @com = "X" # the computer's marker
       @hum = "O" # the user's marker
-      @game_input_output = game_input_output
     end
 
     def start_game
-      start_by_printing_the_board(board)
+      setup_game(board_positions)
 
-      play_game(board)
+      play_game(board_positions)
       
       finish_game
     end
 
-    def start_by_printing_the_board(board)
-      draw_board(board)
+    def setup_game(board)
+      current_board.draw
       show_input_options
     end
 
@@ -36,9 +37,9 @@ module CommandLineGames
 
     def play_game(board)
       until did_game_finish?(board)
-        player_move(human_choice(board), @hum, board)
-        player_move(computer_choice(board), @com, board) if keep_playing?
-        draw_board(board)
+        player_move(human_choice, @hum)
+        player_move(computer_choice, @com) if keep_playing?(board)
+        current_board.draw
       end
     end
 
@@ -46,49 +47,45 @@ module CommandLineGames
       game_is_over(board) || tie(board)
     end
     
-    def keep_playing?
+    def keep_playing?(board)
       !game_is_over(board) && !tie(board)
     end
-    
-    def draw_board(draw_board)
-      game_input_output.draw_board(board)
-    end
 
-    def player_move(choice, symbol, board)
+    def player_move(choice, symbol)
       spot = nil
       until spot
-        spot = check_and_set_choice_on_the_board(board, choice.to_i, symbol)
+        spot = check_and_set_choice_on_the_board(choice.to_i, symbol)
       end
     end
 
-    def check_and_set_choice_on_the_board(board, spot, symbol)
-      if is_position_available?(@board, spot)
-        set_board_position(@board, spot, symbol)
+    def check_and_set_choice_on_the_board(spot, symbol)
+      if current_board.is_position_available?(spot)
+        current_board.set_board_position(spot, symbol)
       else
         spot = nil
       end
       spot
     end
 
-    def human_choice(board)
+    def human_choice
       input = nil
-      input = game_input_output_human_choice(board) until input
+      input = game_input_output_human_choice until input
       input
     end
 
-    def game_input_output_human_choice(board)
+    def game_input_output_human_choice
       input = game_input_output.waiting_for_input
-      input = nil if invalid_input?(input, board)
+      input = nil if invalid_input?(input)
       input
     end
 
-    def invalid_input?(input, board)
-      return true if bad_input?(input, board)
-      return true if position_is_not_available(input, board)
+    def invalid_input?(input)
+      return true if bad_input?(input)
+      return true if position_is_not_available(input)
       false
     end
 
-    def bad_input?(input, board)
+    def bad_input?(input)
       if input.match(/[^0-8]/)
         game_input_output.bad_input 
         game_input_output.show_input_options
@@ -97,8 +94,8 @@ module CommandLineGames
       false
     end
 
-    def position_is_not_available(input, board)
-      if !is_position_available?(board, input.to_i)
+    def position_is_not_available(input)
+      if !current_board.is_position_available?(input.to_i)
         game_input_output.position_not_available 
         game_input_output.show_input_options
         return true
@@ -106,17 +103,9 @@ module CommandLineGames
       false
     end
 
-    def computer_choice(board)
-      return 4 if board[4] == "4"
-      get_best_move(board, @com)
-    end
-
-    def set_board_position(board, spot, mark)
-      board[spot] = mark
-    end
-
-    def is_position_available?(board, spot)
-      board[spot] != "X" && board[spot] != "O"
+    def computer_choice
+      return 4 if current_board.is_position_available?(4)
+      get_best_move(board_positions, @com)
     end
     
     def get_best_move(board, next_player, depth = 0, best_score = {})
@@ -168,8 +157,11 @@ module CommandLineGames
       b.all? { |s| s == "X" || s == "O" }
     end
 
+    def board_positions
+      current_board.positions
+    end
   end
 end
 
-# game = Game.new
+# game = Game.new(GameIO.new)
 # game.start_game

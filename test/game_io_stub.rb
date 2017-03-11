@@ -1,4 +1,4 @@
-class GameIOSub < CommandLineGames::GameIO
+class GameIOStub < CommandLineGames::GameIO
   attr_accessor :input
   attr_reader :content
 
