@@ -24,6 +24,26 @@ module CommandLineGames
       output "Positions has already been chosen."
     end
 
+    def choose_player_type
+      output "Choose player type. H for human or C for computer:"
+    end
+
+    def choose_player_symbol
+       output "Choose player symbol. X or O"
+    end
+
+    def player_turn(name)
+      output "#{name} turn"
+    end
+
+    def for_player_1
+      output "Player 1"
+    end
+
+    def for_player_2
+      output "Player 2"
+    end
+
     def waiting_for_input
       input
     end

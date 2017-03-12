@@ -3,16 +3,15 @@ module CommandLineGames
   class Game
     X_SYMBOL = "X"
     O_SYMBOL = "O"
-    attr_reader :game_input_output, :current_board, :player_1, :player_2
+    SYMBOL_LIST = ["X","O"]
+    PLAYER_TYPES = ["H","C"]
 
-    def initialize(game_io, board)
+    attr_reader :io_interface, :current_board, :player_1, :player_2
+
+    def initialize(io_interface, board)
       @current_board = board
-      @game_input_output = game_io
-
-      @com = X_SYMBOL # the computer's marker
-      @hum = O_SYMBOL # the user's marker
-      @player_1 = HumanPlayer.new(@hum, game_io, self)
-      @player_2 = ComputerPlayer.new(@com, game_io, self)
+      @io_interface = io_interface
+      @symbols = SYMBOL_LIST
     end
 
     def start_game
@@ -24,12 +23,50 @@ module CommandLineGames
     end
 
     def setup_game(board)
+      configure_player_1
+      configure_player_2
       current_board.draw
-      show_input_options
     end
 
-    def show_input_options
-      game_input_output.show_input_options
+    def configure_player_1
+      @io_interface.for_player_1
+      @player_1 = create_player_by_type
+      configure_player_symbol(player_1)
+    rescue HumanBadInputError
+      io_interface.bad_input
+      configure_player_1
+    end
+
+    def configure_player_2
+      @io_interface.for_player_2
+      @player_2 = create_player_by_type
+      configure_player_symbol(player_2)
+    rescue HumanBadInputError
+      io_interface.bad_input
+      configure_player_2
+    end
+    
+    def create_player_by_type
+      @io_interface.choose_player_type
+      type = @io_interface.waiting_for_input
+      fail(HumanBadInputError, 'Bad Input') unless type.upcase.match(/H|C/)
+      Player.create_player(type, @io_interface, self)
+    end
+
+    def configure_player_symbol(player)
+      choose_player_symbol(player)
+    rescue
+      io_interface.bad_input
+      configure_player_symbol(player)  
+    end
+
+    def choose_player_symbol(player)
+      if @symbols.size == 1
+        player.symbol = @symbols.first
+      else
+        symbol = player.choose_symbol(SYMBOL_LIST)
+        @symbols.delete(symbol)
+      end
     end
 
     def finish_game
@@ -37,14 +74,13 @@ module CommandLineGames
     end
     
     def show_game_over_message
-      game_input_output.game_over_message
+      io_interface.game_over_message
     end
 
     def play_game(board)
       until did_game_finish?(board)
-        player_move(player_1, player_2)
-        player_move(player_2, player_1) if keep_playing?(board)
-        current_board.draw
+        player_move(player_1, player_2, "Player 1")
+        player_move(player_2, player_1, "Player 2") if keep_playing?(board)
       end
     end
 
@@ -56,8 +92,10 @@ module CommandLineGames
       !game_is_over(board) && !tie(board)
     end
 
-    def player_move(player, next_player)
+    def player_move(player, next_player, name="")
+      io_interface.player_turn(name)
       get_and_mark_player_choice_on_board(player, next_player)
+      current_board.draw
     rescue HumanBadInputError
       handle_bad_input
       player_move(player, next_player)
@@ -73,13 +111,17 @@ module CommandLineGames
     end
 
     def handle_bad_input
-      game_input_output.bad_input 
-      game_input_output.show_input_options
+      io_interface.bad_input 
+      io_interface.show_input_options
     end
 
     def handle_position_is_not_available
-      game_input_output.position_not_available 
-      game_input_output.show_input_options  
+      io_interface.position_not_available 
+      io_interface.show_input_options  
+    end
+    
+    def show_input_options
+      io_interface.show_input_options
     end
 
     def position_is_not_available(input)
