@@ -11,8 +11,12 @@ module CommandLineGames
       game_input_output.draw_board(positions)
     end
 
-    def set_board_position(spot, mark)
+    def mark_position(spot, mark)
       positions[spot] = mark
+    end
+
+    def availabel_positions
+      positions.select.with_index{|position, index| is_position_available?(index)}.map(&:to_i)
     end
 
     def is_position_available?(spot)

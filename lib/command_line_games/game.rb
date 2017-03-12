@@ -1,13 +1,54 @@
+
 module CommandLineGames
+  class Player
+    HUMAN = "human"
+    COMPUTER = "computer"
+
+    attr_reader :symbol, :type, :io_interface
+
+    def initialize(symbol, type, game_io)
+      @symbol = symbol
+      @type = type
+      @io_interface = game_io
+    end
+
+    def player_choice(board=nil)
+      if type == Player::HUMAN
+        human_choice
+      else
+        computer_choice(board)
+      end
+    end
+
+    def human_choice
+      input = io_interface.waiting_for_input
+      fail('Bad Input') if bad_input?(input)
+      input
+    end
+
+    def bad_input?(input)
+      input.match(/[^0-8]/)
+    end
+
+    def computer_choice(board)
+      return 4 if board.is_position_available?(4)
+      get_best_move(board.positions, player_2.symbol)
+    end
+  end
+
   class Game
-    attr_reader :game_input_output, :current_board
+    X_SYMBOL = "X"
+    O_SYMBOL = "O"
+    attr_reader :game_input_output, :current_board, :player_1, :player_2
 
     def initialize(game_io, board)
       @current_board = board
       @game_input_output = game_io
 
-      @com = "X" # the computer's marker
-      @hum = "O" # the user's marker
+      @com = X_SYMBOL # the computer's marker
+      @hum = O_SYMBOL # the user's marker
+      @player_1 = Player.new(@hum, Player::HUMAN, game_io)
+      @player_2 = Player.new(@com, Player::COMPUTER, game_io)
     end
 
     def start_game
@@ -37,8 +78,8 @@ module CommandLineGames
 
     def play_game(board)
       until did_game_finish?(board)
-        player_move(human_choice, @hum)
-        player_move(computer_choice, @com) if keep_playing?(board)
+        player_move(player_1)
+        player_move(player_2) if keep_playing?(board)
         current_board.draw
       end
     end
@@ -51,47 +92,41 @@ module CommandLineGames
       !game_is_over(board) && !tie(board)
     end
 
-    def player_move(choice, symbol)
-      spot = nil
-      until spot
-        spot = check_and_set_choice_on_the_board(choice.to_i, symbol)
+    def player_move(player)
+      choice = nil
+      until choice
+        begin
+          choice = player_choice(player, current_board).to_i
+          next if position_is_not_available(choice)
+          current_board.mark_position(choice.to_i, player.symbol)
+        rescue
+          game_input_output.bad_input 
+          game_input_output.show_input_options
+        end
       end
     end
 
-    def check_and_set_choice_on_the_board(spot, symbol)
-      if current_board.is_position_available?(spot)
-        current_board.set_board_position(spot, symbol)
+    def player_choice(player, board=nil)
+      if player.type == Player::HUMAN
+        human_choice
       else
-        spot = nil
+        computer_choice(board)
       end
-      spot
     end
 
     def human_choice
-      input = nil
-      input = game_input_output_human_choice until input
-      input
-    end
-
-    def game_input_output_human_choice
       input = game_input_output.waiting_for_input
-      input = nil if invalid_input?(input)
+      fail('Bad Input') if bad_input?(input)
       input
     end
-
-    def invalid_input?(input)
-      return true if bad_input?(input)
-      return true if position_is_not_available(input)
-      false
-    end
-
+    
     def bad_input?(input)
-      if input.match(/[^0-8]/)
-        game_input_output.bad_input 
-        game_input_output.show_input_options
-        return true 
-      end
-      false
+      input.match(/[^0-8]/)
+    end
+    
+    def computer_choice(board=nil)
+      return 4 if board.is_position_available?(4)
+      get_best_move(board.positions, player_2.symbol)
     end
 
     def position_is_not_available(input)
@@ -103,27 +138,27 @@ module CommandLineGames
       false
     end
 
-    def computer_choice
-      return 4 if current_board.is_position_available?(4)
-      get_best_move(board_positions, @com)
-    end
-    
     def get_best_move(board, next_player, depth = 0, best_score = {})
       available_spaces = []
       best_move = nil
+      
+      ### get the available spaces in board
       board.each do |s|
         if s != "X" && s != "O"
           available_spaces << s
         end
       end
+      
+
+      ### try to evaluate each available board position if him can win or loss
       available_spaces.each do |as|
-        board[as.to_i] = @com
+        board[as.to_i] = player_2.symbol
         if game_is_over(board)
           best_move = as.to_i
           board[as.to_i] = as
           return best_move
         else
-          board[as.to_i] = @hum
+          board[as.to_i] = player_1.symbol
           if game_is_over(board)
             best_move = as.to_i
             board[as.to_i] = as
@@ -133,12 +168,16 @@ module CommandLineGames
           end
         end
       end
+      
+      ### if found a best move use it
       if best_move
         return best_move
       else
+        ### get random position
         n = rand(0..available_spaces.count)
         return available_spaces[n].to_i
       end
+
     end
 
     def game_is_over(b)
@@ -162,6 +201,3 @@ module CommandLineGames
     end
   end
 end
-
-# game = Game.new(GameIO.new)
-# game.start_game
