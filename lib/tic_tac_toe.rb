@@ -4,6 +4,9 @@ require_relative "./tic_tac_toe/version"
 
 require_relative "command_line_games/game_io"
 require_relative "command_line_games/board"
+require_relative "command_line_games/player"
+require_relative "command_line_games/human_player"
+require_relative "command_line_games/computer_player"
 require_relative "command_line_games/game"
 
 # game_io = CommandLineGames::GameIO.new
