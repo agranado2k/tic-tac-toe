@@ -4,10 +4,13 @@ module CommandLineGames
       super(symbol, io_interface, game)
     end
 
-    def player_choice(next_player, board)
+    def choice(next_player, board)
       input = io_interface.waiting_for_input
-      fail('Bad Input') if bad_input?(input)
+      fail(HumanBadInputError, 'Bad Input') if bad_input?(input)
       input
     end
+  end
+
+  class HumanBadInputError < RuntimeError
   end
 end

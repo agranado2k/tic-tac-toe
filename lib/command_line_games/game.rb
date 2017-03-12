@@ -57,26 +57,33 @@ module CommandLineGames
     end
 
     def player_move(player, next_player)
-      choice = nil
-      until choice
-        begin
-          choice = player.player_choice(next_player, current_board).to_i
-          next if position_is_not_available(choice)
-          current_board.mark_position(choice.to_i, player.symbol)
-        rescue
-          game_input_output.bad_input 
-          game_input_output.show_input_options
-        end
-      end
+      get_and_mark_player_choice_on_board(player, next_player)
+    rescue HumanBadInputError
+      handle_bad_input
+      player_move(player, next_player)
+    rescue PositionIsNotAvailableError  
+      handle_position_is_not_available
+      player_move(player, next_player)
+    end
+
+    def get_and_mark_player_choice_on_board(player, next_player)
+      choice = player.choice(next_player, current_board).to_i
+      position_is_not_available(choice)
+      current_board.mark_position(choice.to_i, player.symbol)
+    end
+
+    def handle_bad_input
+      game_input_output.bad_input 
+      game_input_output.show_input_options
+    end
+
+    def handle_position_is_not_available
+      game_input_output.position_not_available 
+      game_input_output.show_input_options  
     end
 
     def position_is_not_available(input)
-      if !current_board.is_position_available?(input.to_i)
-        game_input_output.position_not_available 
-        game_input_output.show_input_options
-        return true
-      end
-      false
+      fail(PositionIsNotAvailableError, 'Position is not available') unless current_board.is_position_available?(input.to_i)
     end
 
     def get_best_move(board, current_player_symbol, next_player_symbol, depth = 0, best_score = {})
@@ -140,5 +147,8 @@ module CommandLineGames
     def board_positions
       current_board.positions
     end
+  end
+
+  class PositionIsNotAvailableError < RuntimeError
   end
 end
