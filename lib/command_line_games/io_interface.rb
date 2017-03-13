@@ -4,6 +4,13 @@ module CommandLineGames
       output board_template(board)
     end
 
+    def introduction
+      output "##################################################"
+      output "############    Tic Tac Toe    ###################"
+      output "#### by Command Lines Games Inc. - March/2017 ####"
+      output "##################################################"
+    end
+
     def board_template(board)
       " #{board[0]} | #{board[1]} | #{board[2]} \n===+===+===\n #{board[3]} | #{board[4]} | #{board[5]} \n===+===+===\n #{board[6]} | #{board[7]} | #{board[8]} \n"
     end

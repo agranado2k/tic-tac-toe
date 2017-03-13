@@ -12,10 +12,15 @@ module CommandLineGames
     end
 
     def start_game
+      introduction
       setup_players
       setup_and_draw_board
       play_game(current_board)
       finish_game
+    end
+
+    def introduction
+      @io_interface.introduction
     end
 
     def setup_players
@@ -100,7 +105,7 @@ module CommandLineGames
     end
     
     def someone_won_or_tied_game?(board)
-      someone_won?(board) || tie(board)
+      someone_won?(board) || tie_game?(board)
     end
 
     def someone_won?(b)
@@ -114,7 +119,7 @@ module CommandLineGames
       [b[2], b[4], b[6]].uniq.length == 1
     end
 
-    def tie(b)
+    def tie_game?(b)
       b.all? { |s| s == "X" || s == "O" }
     end
 
@@ -206,11 +211,6 @@ module CommandLineGames
         return available_spaces[n].to_i
       end
 
-    end
-
-
-    def board_positions
-      current_board.positions
     end
   end
 
