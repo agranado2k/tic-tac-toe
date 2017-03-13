@@ -22,5 +22,9 @@ module CommandLineGames
     def is_position_available?(spot)
       positions[spot] != "X" && positions[spot] != "O"
     end
+
+    def clean
+      @positions = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+    end
   end
 end

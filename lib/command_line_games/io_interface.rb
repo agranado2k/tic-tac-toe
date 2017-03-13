@@ -1,5 +1,5 @@
 module CommandLineGames  
-  class GameIO
+  class IOInterface
     def draw_board(board)
       output board_template(board)
     end

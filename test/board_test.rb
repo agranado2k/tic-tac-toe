@@ -3,7 +3,7 @@ require 'test_helper'
 class BoardTest < Minitest::Test
   def setup
     tic_tac_toe_board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
-    @game_io = GameIOStub.new
+    @game_io = IOInterfaceStub.new
     @subject = CommandLineGames::Board.new(tic_tac_toe_board, @game_io)
   end
 
@@ -13,6 +13,14 @@ class BoardTest < Minitest::Test
     @subject.draw
 
     assert_equal @game_io.content, output
+  end
+
+  def test_clean_board
+    board = CommandLineGames::Board.new(["0", "1", "O", "3", "X", "5", "X", "O", "8"], @game_io)
+
+    board.clean
+
+    assert_equal board.positions, ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
   end
 
   def test_initial_board_for_tic_tac_toe

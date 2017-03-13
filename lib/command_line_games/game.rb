@@ -16,15 +16,18 @@ module CommandLineGames
 
     def start_game
       setup_game(board_positions)
-
+      clean_board
       play_game(board_positions)
-      
       finish_game
     end
 
     def setup_game(board)
       configure_player_1
       configure_player_2
+    end
+
+    def clean_board
+      current_board.clean
       current_board.draw
     end
 
@@ -69,14 +72,6 @@ module CommandLineGames
       end
     end
 
-    def finish_game
-      show_game_over_message
-    end
-    
-    def show_game_over_message
-      io_interface.game_over_message
-    end
-
     def play_game(board)
       until did_game_finish?(board)
         player_move(player_1, player_2, "Player 1")
@@ -93,31 +88,35 @@ module CommandLineGames
     end
 
     def player_move(player, next_player, name="")
-      io_interface.player_turn(name)
-      get_and_mark_player_choice_on_board(player, next_player)
-      current_board.draw
+      handle_players_choice(player, next_player, name)
     rescue HumanBadInputError
-      handle_bad_input
-      player_move(player, next_player)
+      handle_bad_input(player, next_player)
     rescue PositionIsNotAvailableError  
-      handle_position_is_not_available
-      player_move(player, next_player)
+      handle_position_is_not_available(player, next_player)
     end
 
-    def get_and_mark_player_choice_on_board(player, next_player)
+    def handle_players_choice(player, next_player, name="")
+      io_interface.player_turn(name)
       choice = player.choice(next_player, current_board).to_i
       position_is_not_available(choice)
-      current_board.mark_position(choice.to_i, player.symbol)
+      mark_and_draw_postion_on_board(choice.to_i, player.symbol)
     end
 
-    def handle_bad_input
+    def mark_and_draw_postion_on_board(choice, symbol)
+      current_board.mark_position(choice, symbol)
+      current_board.draw
+    end
+
+    def handle_bad_input(player, next_player)
       io_interface.bad_input 
       io_interface.show_input_options
+      player_move(player, next_player)
     end
 
-    def handle_position_is_not_available
+    def handle_position_is_not_available(player, next_player)
       io_interface.position_not_available 
-      io_interface.show_input_options  
+      io_interface.show_input_options
+      player_move(player, next_player)
     end
     
     def show_input_options
@@ -126,6 +125,14 @@ module CommandLineGames
 
     def position_is_not_available(input)
       fail(PositionIsNotAvailableError, 'Position is not available') unless current_board.is_position_available?(input.to_i)
+    end
+
+    def finish_game
+      show_game_over_message
+    end
+    
+    def show_game_over_message
+      io_interface.game_over_message
     end
 
     def get_best_move(board, current_player_symbol, next_player_symbol, depth = 0, best_score = {})

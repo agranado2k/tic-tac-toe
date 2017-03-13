@@ -3,7 +3,7 @@ require 'test_helper'
 class PlayerTest < Minitest::Test
 
   def setup
-    @io_interface_stub = GameIOStub.new
+    @io_interface_stub = IOInterfaceStub.new
     @board = CommandLineGames::Board.new(["0", "1", "2", "3", "4", "5", "6", "7", "8"], @io_interface_stub)
     @game = CommandLineGames::Game.new(@io_interface_stub, @board)
     @subject = CommandLineGames::HumanPlayer.new(@io_interface_stub, @game)
