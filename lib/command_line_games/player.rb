@@ -1,7 +1,7 @@
 module CommandLineGames  
   class Player
 
-    attr_accessor :symbol
+    attr_accessor :symbol, :name
     attr_reader :io_interface, :game
 
     def initialize(io_interface, game)
@@ -10,11 +10,15 @@ module CommandLineGames
     end
 
     def choose_player_symbol
-      fail("Have to implement")
+      "X"
     end
 
     def choice(next_player, board)
       fail("Have to implement")
+    end
+
+    def choose_name
+      @name = "Player"
     end
     
     def bad_input?(input)

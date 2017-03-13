@@ -1,10 +1,7 @@
 
 module CommandLineGames
   class Game
-    X_SYMBOL = "X"
-    O_SYMBOL = "O"
     SYMBOL_LIST = ["X","O"]
-    PLAYER_TYPES = ["H","C"]
 
     attr_reader :io_interface, :current_board, :player_1, :player_2
 
@@ -15,45 +12,58 @@ module CommandLineGames
     end
 
     def start_game
-      setup_game(board_positions)
-      clean_board
-      play_game(board_positions)
+      setup_players
+      setup_and_draw_board
+      play_game(current_board)
       finish_game
     end
 
-    def setup_game(board)
-      configure_player_1
-      configure_player_2
+    def setup_players
+      setup_player_1
+      setup_player_2
     end
 
-    def clean_board
-      current_board.clean
-      current_board.draw
+    def setup_player_1
+      create_player_1
+      configure_player(player_1)
+    rescue HumanBadInputError
+      io_interface.bad_input
+      setup_player_1
     end
 
-    def configure_player_1
+    def create_player_1
       @io_interface.for_player_1
       @player_1 = create_player_by_type
-      configure_player_symbol(player_1)
-    rescue HumanBadInputError
-      io_interface.bad_input
-      configure_player_1
     end
 
-    def configure_player_2
-      @io_interface.for_player_2
-      @player_2 = create_player_by_type
-      configure_player_symbol(player_2)
+    def setup_player_2
+      create_player_2
+      configure_player(player_2)
     rescue HumanBadInputError
       io_interface.bad_input
-      configure_player_2
+      setup_player_2
     end
-    
+
+    def create_player_2
+      @io_interface.for_player_2
+      @player_2 = create_player_by_type
+    end
+
     def create_player_by_type
+      type = handle_user_input_to_create_player
+      Player.create_player(type, @io_interface, self)
+    end
+
+    def handle_user_input_to_create_player
       @io_interface.choose_player_type
       type = @io_interface.waiting_for_input
       fail(HumanBadInputError, 'Bad Input') unless type.upcase.match(/H|C/)
-      Player.create_player(type, @io_interface, self)
+      type
+    end
+    
+    def configure_player(player)
+      configure_player_symbol(player)
+      configure_player_name(player)
     end
 
     def configure_player_symbol(player)
@@ -72,31 +82,52 @@ module CommandLineGames
       end
     end
 
-    def play_game(board)
-      until did_game_finish?(board)
-        player_move(player_1, player_2, "Player 1")
-        player_move(player_2, player_1, "Player 2") if keep_playing?(board)
-      end
-    end
-
-    def did_game_finish?(board)
-      game_is_over(board) || tie(board)
+    def configure_player_name(player)
+      player.choose_name
     end
     
-    def keep_playing?(board)
-      !game_is_over(board) && !tie(board)
+    def setup_and_draw_board
+      current_board.clean
+      current_board.draw
     end
 
-    def player_move(player, next_player, name="")
-      handle_players_choice(player, next_player, name)
+    def play_game(board)
+      until someone_won_or_tied_game?(board.positions)
+        player_move(player_1, player_2)
+        break if someone_won_or_tied_game?(board.positions)
+        player_move(player_2, player_1)
+      end
+    end
+    
+    def someone_won_or_tied_game?(board)
+      someone_won?(board) || tie(board)
+    end
+
+    def someone_won?(b)
+      [b[0], b[1], b[2]].uniq.length == 1 ||
+      [b[3], b[4], b[5]].uniq.length == 1 ||
+      [b[6], b[7], b[8]].uniq.length == 1 ||
+      [b[0], b[3], b[6]].uniq.length == 1 ||
+      [b[1], b[4], b[7]].uniq.length == 1 ||
+      [b[2], b[5], b[8]].uniq.length == 1 ||
+      [b[0], b[4], b[8]].uniq.length == 1 ||
+      [b[2], b[4], b[6]].uniq.length == 1
+    end
+
+    def tie(b)
+      b.all? { |s| s == "X" || s == "O" }
+    end
+
+    def player_move(player, next_player)
+      handle_players_choice(player, next_player)
     rescue HumanBadInputError
       handle_bad_input(player, next_player)
     rescue PositionIsNotAvailableError  
       handle_position_is_not_available(player, next_player)
     end
 
-    def handle_players_choice(player, next_player, name="")
-      io_interface.player_turn(name)
+    def handle_players_choice(player, next_player)
+      io_interface.player_turn(player.name)
       choice = player.choice(next_player, current_board).to_i
       position_is_not_available(choice)
       mark_and_draw_postion_on_board(choice.to_i, player.symbol)
@@ -150,13 +181,13 @@ module CommandLineGames
       ### try to evaluate each available board position if him can win or loss
       available_spaces.each do |as|
         board[as.to_i] = current_player_symbol
-        if game_is_over(board)
+        if someone_won?(board)
           best_move = as.to_i
           board[as.to_i] = as
           return best_move
         else
           board[as.to_i] = next_player_symbol
-          if game_is_over(board)
+          if someone_won?(board)
             best_move = as.to_i
             board[as.to_i] = as
             return best_move
@@ -177,21 +208,6 @@ module CommandLineGames
 
     end
 
-    def game_is_over(b)
-
-      [b[0], b[1], b[2]].uniq.length == 1 ||
-      [b[3], b[4], b[5]].uniq.length == 1 ||
-      [b[6], b[7], b[8]].uniq.length == 1 ||
-      [b[0], b[3], b[6]].uniq.length == 1 ||
-      [b[1], b[4], b[7]].uniq.length == 1 ||
-      [b[2], b[5], b[8]].uniq.length == 1 ||
-      [b[0], b[4], b[8]].uniq.length == 1 ||
-      [b[2], b[4], b[6]].uniq.length == 1
-    end
-
-    def tie(b)
-      b.all? { |s| s == "X" || s == "O" }
-    end
 
     def board_positions
       current_board.positions

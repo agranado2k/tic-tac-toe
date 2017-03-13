@@ -17,6 +17,11 @@ module CommandLineGames
       fail(HumanBadInputError, 'Bad Input') unless symbol_list.include?(symbol.upcase)
       symbol
     end
+
+    def choose_name
+      @io_interface.choose_player_name
+      @name = @io_interface.waiting_for_input
+    end
   end
 
   class HumanBadInputError < RuntimeError

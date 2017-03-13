@@ -25,11 +25,15 @@ module CommandLineGames
     end
 
     def choose_player_type
-      output "Choose player type. H for human or C for computer:"
+      output "Choose player's type. H for human or C for computer:"
     end
 
     def choose_player_symbol
-       output "Choose player symbol. X or O"
+       output "Choose player's symbol. X or O"
+    end
+
+    def choose_player_name
+      output "Choose player's name"
     end
 
     def player_turn(name)
