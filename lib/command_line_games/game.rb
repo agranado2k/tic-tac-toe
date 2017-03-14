@@ -31,7 +31,7 @@ module CommandLineGames
     def setup_player_1
       create_player_1
       configure_player(player_1)
-      player_1.strategy = GameStrategy.new(current_board)
+      player_1.strategy = Strategy.get_strategy(current_board)
     rescue HumanBadInputError
       io_interface.bad_input
       setup_player_1
@@ -45,7 +45,7 @@ module CommandLineGames
     def setup_player_2
       create_player_2
       configure_player(player_2)
-      player_2.strategy = GameStrategy.new(current_board)
+      player_2.strategy = Strategy.get_strategy(current_board)
     rescue HumanBadInputError
       io_interface.bad_input
       setup_player_2
