@@ -31,6 +31,7 @@ module CommandLineGames
     def setup_player_1
       create_player_1
       configure_player(player_1)
+      player_1.strategy = GameStrategy.new(current_board)
     rescue HumanBadInputError
       io_interface.bad_input
       setup_player_1
@@ -44,6 +45,7 @@ module CommandLineGames
     def setup_player_2
       create_player_2
       configure_player(player_2)
+      player_2.strategy = GameStrategy.new(current_board)
     rescue HumanBadInputError
       io_interface.bad_input
       setup_player_2
@@ -56,7 +58,7 @@ module CommandLineGames
 
     def create_player_by_type
       type = handle_user_input_to_create_player
-      Player.create_player(type, @io_interface, self)
+      Player.create_player(type, @io_interface)
     end
 
     def handle_user_input_to_create_player
@@ -114,7 +116,7 @@ module CommandLineGames
 
     def handle_players_choice(player, next_player)
       io_interface.player_turn(player.name)
-      choice = player.choice(next_player, current_board).to_i
+      choice = player.choice(next_player).to_i
       position_is_not_available(choice)
       mark_and_draw_postion_on_board(choice.to_i, player.symbol)
     end
@@ -150,48 +152,6 @@ module CommandLineGames
     
     def show_game_over_message
       io_interface.game_over_message
-    end
-
-    def get_best_move(board, positions, current_player_symbol, next_player_symbol, depth = 0, best_score = {})
-      available_spaces = []
-      best_move = nil
-      
-      ### get the available spaces in positions
-      positions.each do |s|
-        if s != "X" && s != "O"
-          available_spaces << s
-        end
-      end
-      
-
-      ### try to evaluate each available positions position if him can win or loss
-      available_spaces.each do |as|
-        positions[as.to_i] = current_player_symbol
-        if board.someone_won?
-          best_move = as.to_i
-          positions[as.to_i] = as
-          return best_move
-        else
-          positions[as.to_i] = next_player_symbol
-          if board.someone_won?
-            best_move = as.to_i
-            positions[as.to_i] = as
-            return best_move
-          else
-            positions[as.to_i] = as
-          end
-        end
-      end
-      
-      ### if found a best move use it
-      if best_move
-        return best_move
-      else
-        ### get random position
-        n = rand(0..available_spaces.count)
-        return available_spaces[n].to_i
-      end
-
     end
   end
 

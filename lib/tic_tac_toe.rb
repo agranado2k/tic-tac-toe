@@ -7,6 +7,7 @@ require_relative "command_line_games/board"
 require_relative "command_line_games/player"
 require_relative "command_line_games/human_player"
 require_relative "command_line_games/computer_player"
+require_relative "command_line_games/game_strategy"
 require_relative "command_line_games/game"
 
 # game_io = CommandLineGames::IOInterface.new

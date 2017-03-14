@@ -1,19 +1,18 @@
 module CommandLineGames  
   class Player
 
-    attr_accessor :symbol, :name
-    attr_reader :io_interface, :game
+    attr_reader :io_interface
+    attr_accessor :symbol, :name, :strategy
 
-    def initialize(io_interface, game)
+    def initialize(io_interface)
       @io_interface = io_interface
-      @game = game
     end
 
     def choose_player_symbol
       "X"
     end
 
-    def choice(next_player, board)
+    def choice(next_player)
       fail("Have to implement")
     end
 
@@ -25,8 +24,8 @@ module CommandLineGames
       input.match(/[^0-8]/)
     end
 
-    def self.create_player(type, io_interface, game)
-      (type.upcase == "H" ? HumanPlayer.new(io_interface, game) : ComputerPlayer.new(io_interface, game))
+    def self.create_player(type, io_interface)
+      (type.upcase == "H" ? HumanPlayer.new(io_interface) : ComputerPlayer.new(io_interface))
     end
   end
 end

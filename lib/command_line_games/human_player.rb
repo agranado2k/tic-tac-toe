@@ -1,10 +1,10 @@
 module CommandLineGames
   class HumanPlayer < Player
-    def initialize(io_interface, game)
-      super(io_interface, game)
+    def initialize(io_interface)
+      super(io_interface)
     end
 
-    def choice(next_player, board)
+    def choice(next_player)
       io_interface.show_input_options
       input = io_interface.waiting_for_input
       fail(HumanBadInputError, 'Bad Input') if bad_input?(input)
