@@ -23,6 +23,25 @@ module CommandLineGames
       positions[spot] != "X" && positions[spot] != "O"
     end
 
+    def someone_won_or_tied_game?
+      someone_won? || tie_game?
+    end
+
+    def someone_won?
+      [positions[0], positions[1], positions[2]].uniq.length == 1 ||
+      [positions[3], positions[4], positions[5]].uniq.length == 1 ||
+      [positions[6], positions[7], positions[8]].uniq.length == 1 ||
+      [positions[0], positions[3], positions[6]].uniq.length == 1 ||
+      [positions[1], positions[4], positions[7]].uniq.length == 1 ||
+      [positions[2], positions[5], positions[8]].uniq.length == 1 ||
+      [positions[0], positions[4], positions[8]].uniq.length == 1 ||
+      [positions[2], positions[4], positions[6]].uniq.length == 1
+    end
+
+    def tie_game?
+      positions.all? { |s| s == "X" || s == "O" }
+    end
+
     def clean
       @positions = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
     end

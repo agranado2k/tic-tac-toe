@@ -6,7 +6,7 @@ module CommandLineGames
 
     def choice(next_player, board)
       return 4 if board.is_position_available?(4)
-      game.get_best_move(board.positions, symbol, next_player.symbol)
+      game.get_best_move(board, board.positions, symbol, next_player.symbol)
     end
 
     def choose_symbol(symbol_list)

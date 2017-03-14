@@ -97,30 +97,11 @@ module CommandLineGames
     end
 
     def play_game(board)
-      until someone_won_or_tied_game?(board.positions)
+      until board.someone_won_or_tied_game?
         player_move(player_1, player_2)
-        break if someone_won_or_tied_game?(board.positions)
+        break if board.someone_won_or_tied_game?
         player_move(player_2, player_1)
       end
-    end
-    
-    def someone_won_or_tied_game?(board)
-      someone_won?(board) || tie_game?(board)
-    end
-
-    def someone_won?(b)
-      [b[0], b[1], b[2]].uniq.length == 1 ||
-      [b[3], b[4], b[5]].uniq.length == 1 ||
-      [b[6], b[7], b[8]].uniq.length == 1 ||
-      [b[0], b[3], b[6]].uniq.length == 1 ||
-      [b[1], b[4], b[7]].uniq.length == 1 ||
-      [b[2], b[5], b[8]].uniq.length == 1 ||
-      [b[0], b[4], b[8]].uniq.length == 1 ||
-      [b[2], b[4], b[6]].uniq.length == 1
-    end
-
-    def tie_game?(b)
-      b.all? { |s| s == "X" || s == "O" }
     end
 
     def player_move(player, next_player)
@@ -171,33 +152,33 @@ module CommandLineGames
       io_interface.game_over_message
     end
 
-    def get_best_move(board, current_player_symbol, next_player_symbol, depth = 0, best_score = {})
+    def get_best_move(board, positions, current_player_symbol, next_player_symbol, depth = 0, best_score = {})
       available_spaces = []
       best_move = nil
       
-      ### get the available spaces in board
-      board.each do |s|
+      ### get the available spaces in positions
+      positions.each do |s|
         if s != "X" && s != "O"
           available_spaces << s
         end
       end
       
 
-      ### try to evaluate each available board position if him can win or loss
+      ### try to evaluate each available positions position if him can win or loss
       available_spaces.each do |as|
-        board[as.to_i] = current_player_symbol
-        if someone_won?(board)
+        positions[as.to_i] = current_player_symbol
+        if board.someone_won?
           best_move = as.to_i
-          board[as.to_i] = as
+          positions[as.to_i] = as
           return best_move
         else
-          board[as.to_i] = next_player_symbol
-          if someone_won?(board)
+          positions[as.to_i] = next_player_symbol
+          if board.someone_won?
             best_move = as.to_i
-            board[as.to_i] = as
+            positions[as.to_i] = as
             return best_move
           else
-            board[as.to_i] = as
+            positions[as.to_i] = as
           end
         end
       end
