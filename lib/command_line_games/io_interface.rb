@@ -19,9 +19,6 @@ module CommandLineGames
       output "Enter [0-8]:"
     end
 
-    def game_over_message
-      output "Game over"
-    end
 
     def bad_input
       output "Ops... Invalid input!"
@@ -53,6 +50,18 @@ module CommandLineGames
 
     def for_player_2
       output "Player 2"
+    end
+
+    def show_tied_game_message
+      output "Tied Game! Nobody wins! :("
+    end
+
+    def winner_message(name)
+      output "Player #{name} wins!!! =)"
+    end
+
+    def game_over_message
+      output "Game over"
     end
 
     def waiting_for_input

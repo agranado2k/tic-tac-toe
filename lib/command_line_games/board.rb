@@ -24,7 +24,7 @@ module CommandLineGames
     end
 
     def someone_won_or_tied_game?
-      someone_won? || tie_game?
+      someone_won? || tied_game?
     end
 
     def someone_won?
@@ -38,7 +38,7 @@ module CommandLineGames
       [positions[2], positions[4], positions[6]].uniq.length == 1
     end
 
-    def tie_game?
+    def tied_game?
       positions.all? { |s| s == "X" || s == "O" }
     end
 

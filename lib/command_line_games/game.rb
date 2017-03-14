@@ -3,7 +3,7 @@ module CommandLineGames
   class Game
     SYMBOL_LIST = ["X","O"]
 
-    attr_reader :io_interface, :current_board, :player_1, :player_2
+    attr_reader :io_interface, :current_board, :player_1, :player_2, :winner
 
     def initialize(io_interface, board)
       @current_board = board
@@ -101,8 +101,10 @@ module CommandLineGames
     def play_game(board)
       until board.someone_won_or_tied_game?
         player_move(player_1, player_2)
+        @winner = player_1
         break if board.someone_won_or_tied_game?
         player_move(player_2, player_1)
+        @winner = player_2
       end
     end
 
@@ -147,7 +149,20 @@ module CommandLineGames
     end
 
     def finish_game
+      if current_board.tied_game?
+        show_tied_game_message
+      else
+        show_winner_message(winner.name)        
+      end
       show_game_over_message
+    end
+
+    def show_tied_game_message
+      io_interface.show_tied_game_message
+    end
+
+    def show_winner_message(name)
+      io_interface.winner_message(name)
     end
     
     def show_game_over_message
