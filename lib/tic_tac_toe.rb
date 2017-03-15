@@ -2,6 +2,8 @@
 
 require_relative "./tic_tac_toe/version"
 
+require_relative "command_line_games/errors/human_bad_input"
+require_relative "command_line_games/errors/position_is_not_available"
 require_relative "command_line_games/io_interface"
 require_relative "command_line_games/board"
 require_relative "command_line_games/player"

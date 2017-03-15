@@ -31,7 +31,7 @@ module CommandLineGames
     def setup_player_1
       create_player_1
       configure_player(player_1)
-    rescue HumanBadInputError
+    rescue Errors::HumanBadInput
       io_interface.bad_input
       setup_player_1
     end
@@ -44,7 +44,7 @@ module CommandLineGames
     def setup_player_2
       create_player_2
       configure_player(player_2)
-    rescue HumanBadInputError
+    rescue Errors::HumanBadInput
       io_interface.bad_input
       setup_player_2
     end
@@ -62,7 +62,7 @@ module CommandLineGames
     def handle_user_input_to_create_player
       @io_interface.choose_player_type
       type = @io_interface.waiting_for_input
-      fail(HumanBadInputError, 'Bad Input') unless type.upcase.match(/H|C/)
+      fail(Errors::HumanBadInput, 'Bad Input') unless type.upcase.match(/H|C/)
       type
     end
     
@@ -113,9 +113,9 @@ module CommandLineGames
 
     def player_move(player, next_player)
       handle_players_choice(player, next_player)
-    rescue HumanBadInputError
+    rescue Errors::HumanBadInput
       handle_bad_input(player, next_player)
-    rescue PositionIsNotAvailableError  
+    rescue Errors::PositionIsNotAvailable  
       handle_position_is_not_available(player, next_player)
     end
 
@@ -148,7 +148,7 @@ module CommandLineGames
     end
 
     def position_is_not_available(input)
-      fail(PositionIsNotAvailableError, 'Position is not available') unless current_board.is_position_available?(input.to_i)
+      fail(Errors::PositionIsNotAvailable, 'Position is not available') unless current_board.is_position_available?(input.to_i)
     end
 
     def finish_game
@@ -171,8 +171,5 @@ module CommandLineGames
     def show_game_over_message
       io_interface.game_over_message
     end
-  end
-
-  class PositionIsNotAvailableError < RuntimeError
   end
 end
