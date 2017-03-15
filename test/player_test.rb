@@ -5,14 +5,14 @@ class PlayerTest < Minitest::Test
   def setup
     @io_interface_stub = IOInterfaceStub.new
     @board = CommandLineGames::Board.new(["0", "1", "2", "3", "4", "5", "6", "7", "8"], @io_interface_stub)
-    @humnan_player = CommandLineGames::HumanPlayer.new(@io_interface_stub)
-    @computer_player = CommandLineGames::ComputerPlayer.new(@io_interface_stub)
+    @humnan_player = CommandLineGames::Players::Human.new(@io_interface_stub)
+    @computer_player = CommandLineGames::Players::Computer.new(@io_interface_stub)
     @computer_player.strategy = CommandLineGames::Strategy.new(@board)
-    @next_player = CommandLineGames::HumanPlayer.new(@io_interface_stub)
+    @next_player = CommandLineGames::Players::Human.new(@io_interface_stub)
   end
 
   def test_create_player_by_type_choice
-    assert_instance_of CommandLineGames::HumanPlayer, CommandLineGames::Player.create_player("H", @io_interface_stub)    
+    assert_instance_of CommandLineGames::Players::Human, CommandLineGames::Player.create_player("H", @io_interface_stub)    
   end
 
   def test_player_choice_computer_1
@@ -21,7 +21,7 @@ class PlayerTest < Minitest::Test
 
   def test_player_choice_computer_2
     board = CommandLineGames::Board.new(["0", "1", "2", "3", "X", "5", "6", "7", "8"], @io_interface_stub)
-    computer_player = CommandLineGames::ComputerPlayer.new(@io_interface_stub)
+    computer_player = CommandLineGames::Players::Computer.new(@io_interface_stub)
     computer_player.strategy = CommandLineGames::Strategy.new(board)
 
     refute_equal computer_player.choice(@next_player), 4

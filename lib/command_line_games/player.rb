@@ -13,7 +13,7 @@ module CommandLineGames
     end
 
     def choice(next_player)
-      fail("Have to implement")
+      strategy.get_best_move(symbol, next_player.symbol)
     end
 
     def choose_name
@@ -25,7 +25,7 @@ module CommandLineGames
     end
 
     def self.create_player(type, io_interface)
-      (type.upcase == "H" ? HumanPlayer.new(io_interface) : ComputerPlayer.new(io_interface))
+      (type.upcase == "H" ? Players::Human.new(io_interface) : Players::Computer.new(io_interface))
     end
   end
 end
