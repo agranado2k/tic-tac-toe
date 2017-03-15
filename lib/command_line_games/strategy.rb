@@ -13,8 +13,14 @@ module CommandLineGames
       available_spaces[n].to_i
     end
 
-    def self.get_strategy(board, strategy_id=nil)
-      Strategies::Normal.new(board)
+    def self.create(board, strategy_level=nil)
+      if strategy_level == "E"
+        Strategies::Easy.new(board)
+      elsif strategy_level == "H"
+        Strategies::Hard.new(board)
+      else
+        Strategies::Normal.new(board)
+      end
     end
   end
 end

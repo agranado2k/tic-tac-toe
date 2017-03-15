@@ -31,7 +31,6 @@ module CommandLineGames
     def setup_player_1
       create_player_1
       configure_player(player_1)
-      player_1.strategy = Strategy.get_strategy(current_board)
     rescue HumanBadInputError
       io_interface.bad_input
       setup_player_1
@@ -45,7 +44,6 @@ module CommandLineGames
     def setup_player_2
       create_player_2
       configure_player(player_2)
-      player_2.strategy = Strategy.get_strategy(current_board)
     rescue HumanBadInputError
       io_interface.bad_input
       setup_player_2
@@ -71,6 +69,7 @@ module CommandLineGames
     def configure_player(player)
       configure_player_symbol(player)
       configure_player_name(player)
+      configure_player_strategy(player)
     end
 
     def configure_player_symbol(player)
@@ -91,6 +90,10 @@ module CommandLineGames
 
     def configure_player_name(player)
       player.choose_name
+    end
+
+    def configure_player_strategy(player)
+      player.choose_strategy(current_board)
     end
     
     def setup_and_draw_board

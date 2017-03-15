@@ -32,6 +32,11 @@ module CommandLineGames
       output "Choose player's type. H for human or C for computer:"
     end
 
+    def choose_player_strategy
+      output "Difficulty level"
+      output "(E)asy - (N)ormal - (H)ard [default is N]:"
+    end
+
     def choose_player_symbol
        output "Choose player's symbol. X or O"
     end

@@ -23,6 +23,9 @@ module CommandLineGames
         @io_interface.choose_player_name
         @name = @io_interface.waiting_for_input
       end
+
+      def choose_strategy(board)
+      end
     end
   end
 
