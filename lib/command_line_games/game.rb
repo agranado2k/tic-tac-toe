@@ -24,34 +24,38 @@ module CommandLineGames
     end
 
     def setup_players
-      setup_player_1
-      setup_player_2
+      @player_1 = setup_player_1(@player_1)
+      @player_2 = setup_player_2(@player_2)
     end
 
-    def setup_player_1
-      create_player_1
-      configure_player(player_1)
+    def setup_player_1(player)
+      player = create_player_1
+      player = configure_player(player)
     rescue Errors::HumanBadInput
       io_interface.bad_input
-      setup_player_1
+      player = setup_player_1(player)
+    ensure
+      player
     end
 
     def create_player_1
       @io_interface.for_player_1
-      @player_1 = create_player_by_type
+      create_player_by_type
     end
 
-    def setup_player_2
-      create_player_2
-      configure_player(player_2)
+    def setup_player_2(player)
+      player = create_player_2
+      player = configure_player(player)
     rescue Errors::HumanBadInput
       io_interface.bad_input
-      setup_player_2
+      player = setup_player_2(player)
+    ensure
+      player
     end
 
     def create_player_2
       @io_interface.for_player_2
-      @player_2 = create_player_by_type
+      create_player_by_type
     end
 
     def create_player_by_type
@@ -70,6 +74,7 @@ module CommandLineGames
       configure_player_symbol(player)
       configure_player_name(player)
       configure_player_strategy(player)
+      player
     end
 
     def configure_player_symbol(player)
