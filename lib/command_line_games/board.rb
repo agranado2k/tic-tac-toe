@@ -2,6 +2,15 @@ module CommandLineGames
   class Board
     attr_reader :positions, :game_input_output
 
+    WINNING_COMBINATIONS = [
+      # Horizontal wins:
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      # Vertical wins:
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      # Diagonal wins:
+      [0, 4, 8], [2, 4, 6]
+    ]
+
     def initialize(board, game_input_output)
       @positions = board
       @game_input_output = game_input_output
@@ -40,6 +49,20 @@ module CommandLineGames
 
     def tied_game?
       positions.all? { |s| s == "X" || s == "O" }
+    end
+
+    def winner
+      combo = winning_combination
+      combo ? positions[combo[0]] : false
+    end
+
+    def winning_combination
+      WINNING_COMBINATIONS.each do |combo|
+        if positions[combo[0]] == positions[combo[1]] && positions[combo[1]] == positions[combo[2]]
+          return combo unless positions[combo[0]].nil?
+        end
+      end
+      false
     end
 
     def clean

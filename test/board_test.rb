@@ -56,4 +56,20 @@ class BoardTest < Minitest::Test
 
     assert_equal board.availabel_positions, [0,2,4,5,7,8]
   end
+
+  def test_who_won_by_symbol_1
+    tic_tac_toe_board = ["X", "X", "X", "O", "4", "5", "O", "7", "8"]
+
+    board = CommandLineGames::Board.new(tic_tac_toe_board, @game_io)
+
+    assert_equal board.winner, "X"
+  end
+
+  def test_who_won_by_symbol_2
+    tic_tac_toe_board = ["X", "1", "O", "3", "O", "5", "O", "7", "X"]
+
+    board = CommandLineGames::Board.new(tic_tac_toe_board, @game_io)
+
+    assert_equal board.winner, "O"
+  end
 end
