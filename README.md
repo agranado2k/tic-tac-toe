@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/agranado2k/tic-tac-toe.svg?branch=master)](https://travis-ci.org/agranado2k/tic-tac-toe)
 # Tic Tac Toe 
 
 * Play test with **rake test**
