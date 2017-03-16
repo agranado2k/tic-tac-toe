@@ -1,9 +1,5 @@
 module CommandLineGames  
   class IOInterface
-    def draw_board(board)
-      output board_template(board)
-    end
-
     def introduction
       output "##################################################"
       output "############    Tic Tac Toe    ###################"
@@ -12,6 +8,10 @@ module CommandLineGames
       output ""
       output "Enter q any time to exit."
       output ""
+    end
+    
+    def draw_board(board)
+      output board_template(board)
     end
 
     def board_template(board)
@@ -92,12 +92,14 @@ module CommandLineGames
     end
 
     def input
-      tmp = gets.chomp
-      if tmp.upcase.match(/Q/)
-        output "Bye bye!"
-        exit(true)
-      end
-      tmp
+      tmp_input = gets.chomp
+      quit_game if tmp_input.upcase.match(/Q/)
+      tmp_input
+    end
+
+    def quit_game
+      output "Bye bye!"
+      exit(true)
     end
   end
 end

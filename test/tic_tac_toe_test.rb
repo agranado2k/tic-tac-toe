@@ -6,7 +6,7 @@ class GameTest < Minitest::Test
   def setup
     io_interface = CommandLineGames::IOInterface.new
     board = CommandLineGames::Board.new(["0", "1", "2", "3", "4", "5", "6", "7", "8"], io_interface)
-    @subject = CommandLineGames::Game.new(io_interface, board)
+    @subject = CommandLineGames::GameController.new(io_interface, board)
   end
 
   def test_play_game_with_simple_sequence_0_1_3_to_lose_from_default_game_io

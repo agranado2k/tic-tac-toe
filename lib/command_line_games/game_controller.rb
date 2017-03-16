@@ -1,12 +1,13 @@
 
 module CommandLineGames
-  class Game
-    SYMBOL_LIST = ["X","O"]
+  class GameController
+    include GameConfigurator
 
-    attr_reader :io_interface, :current_board, :player_1, :player_2, :winner
+    attr_reader :io_interface, :board, :player_1, :player_2, :winner
+    attr_accessor :symbols
 
     def initialize(io_interface, board)
-      @current_board = board
+      @board = board
       @io_interface = io_interface
       @symbols = SYMBOL_LIST
     end
@@ -15,7 +16,7 @@ module CommandLineGames
       introduction
       setup_players
       setup_and_draw_board
-      play_game(current_board)
+      play_game(board)
       finish_game
     end
 
@@ -30,97 +31,27 @@ module CommandLineGames
       io_interface.player_setup(2, @player_2.name, @player_2.symbol)
     end
 
-    def setup_player_1(player)
-      player = create_player_1
-      player = configure_player(player)
-    rescue Errors::HumanBadInput
-      io_interface.bad_input
-      player = setup_player_1(player)
-    ensure
-      player
-    end
-
-    def create_player_1
-      @io_interface.for_player_1
-      create_player_by_type
-    end
-
-    def setup_player_2(player)
-      player = create_player_2
-      player = configure_player(player)
-    rescue Errors::HumanBadInput
-      io_interface.bad_input
-      player = setup_player_2(player)
-    ensure
-      player
-    end
-
-    def create_player_2
-      @io_interface.for_player_2
-      create_player_by_type
-    end
-
-    def create_player_by_type
-      type = handle_user_input_to_create_player
-      Player.create_player(type, @io_interface)
-    end
-
-    def handle_user_input_to_create_player
-      @io_interface.choose_player_type
-      type = @io_interface.waiting_for_input
-      fail(Errors::HumanBadInput, 'Bad Input') unless type.upcase.match(/H|C/)
-      type
-    end
-    
-    def configure_player(player)
-      configure_player_symbol(player)
-      configure_player_name(player)
-      configure_player_strategy(player)
-      player
-    end
-
-    def configure_player_symbol(player)
-      choose_player_symbol(player)
-    rescue
-      io_interface.bad_input
-      configure_player_symbol(player)  
-    end
-
-    def choose_player_symbol(player)
-      if @symbols.size == 1
-        player.symbol = @symbols.first
-      else
-        symbol = player.choose_symbol(SYMBOL_LIST)
-        @symbols.delete(symbol)
-      end
-    end
-
-    def configure_player_name(player)
-      player.choose_name
-    end
-
-    def configure_player_strategy(player)
-      player.choose_strategy(current_board)
+    def remove_symbol_from_list(symbol)
+      symbols.delete(symbol)
     end
     
     def setup_and_draw_board
       io_interface.lets_play
-      current_board.clean
-      current_board.draw
+      board.clean
+      board.draw
     end
 
     def play_game(board)
       until board.someone_won_or_tied_game?
         player_move(player_1, player_2)
-        @winner = player_1
         break if board.someone_won_or_tied_game?
         player_move(player_2, player_1)
-        @winner = player_2
       end
     end
 
     def player_move(player, next_player)
       handle_players_choice(player, next_player)
+      @winner = player
     rescue Errors::HumanBadInput
       handle_bad_input(player, next_player)
     rescue Errors::PositionIsNotAvailable  
@@ -135,8 +66,8 @@ module CommandLineGames
     end
 
     def mark_and_draw_postion_on_board(choice, symbol)
-      current_board.mark_position(choice, symbol)
-      current_board.draw
+      board.mark_position(choice, symbol)
+      board.draw
     end
 
     def handle_bad_input(player, next_player)
@@ -156,11 +87,11 @@ module CommandLineGames
     end
 
     def position_is_not_available(input)
-      fail(Errors::PositionIsNotAvailable, 'Position is not available') unless current_board.is_position_available?(input.to_i)
+      fail(Errors::PositionIsNotAvailable, 'Position is not available') unless board.is_position_available?(input.to_i)
     end
 
     def finish_game
-      if current_board.tied_game?
+      if board.tied_game?
         show_tied_game_message
       else
         show_winner_message(winner.name, winner.symbol)        
