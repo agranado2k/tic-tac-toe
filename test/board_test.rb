@@ -7,12 +7,10 @@ class BoardTest < Minitest::Test
     @subject = CommandLineGames::Board.new(tic_tac_toe_board, @game_io)
   end
 
-  def test_draw_the_board
-    output = " 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n"
+  def test_initial_board_for_tic_tac_toe
+    initial_board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
 
-    @subject.draw
-
-    assert_equal @game_io.content, output
+    assert_equal @subject.positions, initial_board
   end
 
   def test_clean_board
@@ -23,10 +21,12 @@ class BoardTest < Minitest::Test
     assert_equal board.positions, ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
   end
 
-  def test_initial_board_for_tic_tac_toe
-    initial_board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+  def test_draw_the_board
+    output = " 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n"
 
-    assert_equal @subject.positions, initial_board
+    @subject.draw
+
+    assert_equal @game_io.content, output
   end
 
   def test_set_board_position
@@ -54,7 +54,7 @@ class BoardTest < Minitest::Test
     tic_tac_toe_board = ["0", "X", "2", "O", "4", "5", "O", "7", "8"]
     board = CommandLineGames::Board.new(tic_tac_toe_board, @game_io)
 
-    assert_equal board.availabel_positions, [0,2,4,5,7,8]
+    assert_equal board.available_positions, [0,2,4,5,7,8]
   end
 
   def test_who_won_by_symbol_1

@@ -29,7 +29,7 @@ module CommandLineGames
       positions[spot] = mark
     end
 
-    def availabel_positions
+    def available_positions
       positions.select.with_index{|position, index| is_position_available?(index)}.map(&:to_i)
     end
 

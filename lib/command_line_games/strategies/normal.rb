@@ -3,7 +3,7 @@ module CommandLineGames
     class Medium < Strategy
       def get_best_move(current_player_symbol)
         return 4 if board.is_position_available?(4)
-        available_spaces = board.availabel_positions
+        available_spaces = board.available_positions
         best_move = nil
 
         ### try to evaluate each available board position if him can win or loss

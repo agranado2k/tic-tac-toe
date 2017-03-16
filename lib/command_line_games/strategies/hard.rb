@@ -11,7 +11,7 @@ module CommandLineGames
 
         scores = {}
 
-        local_board.availabel_positions.each do |position|
+        local_board.available_positions.each do |position|
           # Copy board so we don't mess up original
           potential_board = local_board.dup
           potential_board.mark_position(position, current_player_symbol)
