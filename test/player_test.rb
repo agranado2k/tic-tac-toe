@@ -7,7 +7,7 @@ class PlayerTest < Minitest::Test
     @board = CommandLineGames::Board.new(["0", "1", "2", "3", "4", "5", "6", "7", "8"], @io_interface_stub)
     @humnan_player = CommandLineGames::Players::Human.new(@io_interface_stub)
     @computer_player = CommandLineGames::Players::Computer.new(@io_interface_stub)
-    @computer_player.strategy = CommandLineGames::Strategy.new(@board, @computer_player.symbol)
+    @computer_player.strategy = CommandLineGames::Strategy.create(@board, @computer_player.symbol)
     @next_player = CommandLineGames::Players::Human.new(@io_interface_stub)
   end
 
@@ -22,7 +22,7 @@ class PlayerTest < Minitest::Test
   def test_player_choice_computer_2
     board = CommandLineGames::Board.new(["0", "1", "2", "3", "X", "5", "6", "7", "8"], @io_interface_stub)
     computer_player = CommandLineGames::Players::Computer.new(@io_interface_stub)
-    computer_player.strategy = CommandLineGames::Strategy.new(board, computer_player.symbol)
+    computer_player.strategy = CommandLineGames::Strategy.create(board, computer_player.symbol)
 
     refute_equal computer_player.choice, 4
   end

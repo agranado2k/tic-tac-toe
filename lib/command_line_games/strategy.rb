@@ -8,15 +8,17 @@ module CommandLineGames
     end
 
     def get_best_move(current_player_symbol)
-      return 4 if board.is_position_available?(4)      
-      available_spaces = board.available_positions
-      n = rand(0..available_spaces.count)
-      available_spaces[n].to_i
+      raise NotImplementedError
     end
 
     def opponent(symbol)
-        symbol == 'X' ? 'O' : 'X'
-      end
+      symbol == 'X' ? 'O' : 'X'
+    end
+
+    def random_position(available_spaces)
+      n = rand(0..available_spaces.count)
+      available_spaces[n].to_i
+    end
 
     def self.create(board, current_symbol, strategy_level=nil)
       if strategy_level == "E"

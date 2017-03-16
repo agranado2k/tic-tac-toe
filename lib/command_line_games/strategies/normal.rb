@@ -3,36 +3,37 @@ module CommandLineGames
     class Medium < Strategy
       def get_best_move(current_player_symbol)
         return 4 if board.is_position_available?(4)
-        available_spaces = board.available_positions
-        best_move = nil
+        best_move = try_to_evaluate_each_available_board_position_if_him_can_win_or_loss(board.available_positions, current_player_symbol, board)        
+        return best_move if best_move
+        random_position(board.available_positions)
+      end
 
-        ### try to evaluate each available board position if him can win or loss
-        available_spaces.each do |as|
-          board.positions[as.to_i] = current_player_symbol
-          if board.someone_won?
-            best_move = as.to_i
-            board.positions[as.to_i] = as
-            return best_move
-          else
-            board.positions[as.to_i] = opponent(current_player_symbol)
-            if board.someone_won?
-              best_move = as.to_i
-              board.positions[as.to_i] = as
-              return best_move
-            else
-              board.positions[as.to_i] = as
-            end
-          end
+      def try_to_evaluate_each_available_board_position_if_him_can_win_or_loss(available_spaces, current_player_symbol, board)
+        best_move = evaluate_each_available_board_position_if_him_can_win(available_spaces, current_player_symbol, board)
+        best_move = evaluate_each_available_board_position_if_him_can_loss(available_spaces, opponent(current_player_symbol), board) if best_move.nil?
+        best_move
+      end
+
+      def evaluate_each_available_board_position_if_him_can_win(available_spaces, player_symbol, board)
+        evaluate_each_available_board_position(available_spaces, player_symbol, board)
+      end
+
+      def evaluate_each_available_board_position_if_him_can_loss(available_spaces, player_symbol, board)
+        evaluate_each_available_board_position(available_spaces, player_symbol, board)
+      end
+
+      def evaluate_each_available_board_position(available_spaces, player_symbol, board)
+        possibilities = available_spaces.select do |as|
+          local_board = board.dup
+          check_best_move(as, local_board, player_symbol) 
         end
-        
-        ### if found a best move use it
-        if best_move
-          return best_move
-        else
-          ### get random position
-          n = rand(0..available_spaces.count)
-          return available_spaces[n].to_i
-        end
+        possibilities.first
+      end
+
+      def check_best_move(current_position, local_board, current_player_symbol)
+        local_board.positions[current_position.to_i] = current_player_symbol
+        return current_position.to_i if local_board.someone_won?
+        nil
       end
     end
   end

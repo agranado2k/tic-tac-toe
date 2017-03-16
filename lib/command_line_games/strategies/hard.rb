@@ -8,19 +8,20 @@ module CommandLineGames
 
       def minmax(local_board, current_player_symbol)
         return score(local_board) if local_board.someone_won_or_tied_game?
-
         scores = {}
+        scores.merge!(for_each_available_position_mark_position_and_call_minmax(local_board, current_player_symbol, scores))
+        best_choice, best_score = best_move(current_player_symbol, scores)
+        return best_score, best_choice
+      end
 
+      def for_each_available_position_mark_position_and_call_minmax(local_board, current_player_symbol, scores)
         local_board.available_positions.each do |position|
           # Copy board so we don't mess up original
           potential_board = local_board.dup
           potential_board.mark_position(position, current_player_symbol)
-
           scores[position], best_choice = minmax(potential_board, opponent(current_player_symbol))
         end
-
-        best_choice, best_score = best_move(current_player_symbol, scores)
-        return best_score, best_choice
+        scores
       end
 
       def best_move(piece, scores)
