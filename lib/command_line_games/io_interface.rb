@@ -48,8 +48,19 @@ module CommandLineGames
       output "Choose player's name"
     end
 
-    def player_turn(name)
-      output "#{name} turn"
+    def player_setup(position, name, symbol)
+      output ""
+      output "Player #{position} - #{name} (#{symbol})"
+    end
+
+    def lets_play
+      output ""
+      output "Let's play! \\0/"
+      output ""
+    end
+
+    def player_turn(name, symbol)
+      output "#{name} (#{symbol}) turn"
     end
 
     def for_player_1
@@ -64,8 +75,8 @@ module CommandLineGames
       output "Tied Game! Nobody wins! :("
     end
 
-    def winner_message(name)
-      output "Player #{name} wins!!! =)"
+    def winner_message(name, symbol)
+      output "Player #{name} (#{symbol}) wins!!! =)"
     end
 
     def game_over_message

@@ -8,7 +8,7 @@ module CommandLineGames
       @io_interface = io_interface
     end
 
-    def choose_player_symbol
+    def choose_symbol
       "X"
     end
 

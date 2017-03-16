@@ -8,6 +8,10 @@ module CommandLineGames
       def choose_symbol(symbol_list)
         @symbol = symbol_list.first
       end
+
+      def choose_name
+        @name = "Computer"
+      end
     end
   end
 end

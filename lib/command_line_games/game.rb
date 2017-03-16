@@ -26,6 +26,8 @@ module CommandLineGames
     def setup_players
       @player_1 = setup_player_1(@player_1)
       @player_2 = setup_player_2(@player_2)
+      io_interface.player_setup(1, @player_1.name, @player_1.symbol)
+      io_interface.player_setup(2, @player_2.name, @player_2.symbol)
     end
 
     def setup_player_1(player)
@@ -102,6 +104,7 @@ module CommandLineGames
     end
     
     def setup_and_draw_board
+      io_interface.lets_play
       current_board.clean
       current_board.draw
     end
@@ -125,7 +128,7 @@ module CommandLineGames
     end
 
     def handle_players_choice(player, next_player)
-      io_interface.player_turn(player.name)
+      io_interface.player_turn(player.name, player.symbol)
       choice = player.choice.to_i
       position_is_not_available(choice)
       mark_and_draw_postion_on_board(choice.to_i, player.symbol)
@@ -160,7 +163,7 @@ module CommandLineGames
       if current_board.tied_game?
         show_tied_game_message
       else
-        show_winner_message(winner.name)        
+        show_winner_message(winner.name, winner.symbol)        
       end
       show_game_over_message
     end
@@ -169,8 +172,8 @@ module CommandLineGames
       io_interface.show_tied_game_message
     end
 
-    def show_winner_message(name)
-      io_interface.winner_message(name)
+    def show_winner_message(name, symbol=nil)
+      io_interface.winner_message(name, symbol)
     end
     
     def show_game_over_message
