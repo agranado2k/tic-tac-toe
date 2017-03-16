@@ -126,7 +126,7 @@ module CommandLineGames
 
     def handle_players_choice(player, next_player)
       io_interface.player_turn(player.name)
-      choice = player.choice(next_player).to_i
+      choice = player.choice.to_i
       position_is_not_available(choice)
       mark_and_draw_postion_on_board(choice.to_i, player.symbol)
     end

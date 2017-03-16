@@ -1,7 +1,7 @@
 module CommandLineGames
   module Strategies
     class Normal < Strategy
-      def get_best_move(current_player_symbol, next_player_symbol, depth = 0, best_score = {})
+      def get_best_move(current_player_symbol)
         return 4 if board.is_position_available?(4)
         available_spaces = board.availabel_positions
         best_move = nil
@@ -14,7 +14,7 @@ module CommandLineGames
             board.positions[as.to_i] = as
             return best_move
           else
-            board.positions[as.to_i] = next_player_symbol
+            board.positions[as.to_i] = opponent(current_player_symbol)
             if board.someone_won?
               best_move = as.to_i
               board.positions[as.to_i] = as

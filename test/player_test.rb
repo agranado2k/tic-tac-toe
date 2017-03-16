@@ -7,7 +7,7 @@ class PlayerTest < Minitest::Test
     @board = CommandLineGames::Board.new(["0", "1", "2", "3", "4", "5", "6", "7", "8"], @io_interface_stub)
     @humnan_player = CommandLineGames::Players::Human.new(@io_interface_stub)
     @computer_player = CommandLineGames::Players::Computer.new(@io_interface_stub)
-    @computer_player.strategy = CommandLineGames::Strategy.new(@board)
+    @computer_player.strategy = CommandLineGames::Strategy.new(@board, @computer_player.symbol)
     @next_player = CommandLineGames::Players::Human.new(@io_interface_stub)
   end
 
@@ -16,40 +16,40 @@ class PlayerTest < Minitest::Test
   end
 
   def test_player_choice_computer_1
-    assert_equal @computer_player.choice(@next_player), 4
+    assert_equal @computer_player.choice, 4
   end
 
   def test_player_choice_computer_2
     board = CommandLineGames::Board.new(["0", "1", "2", "3", "X", "5", "6", "7", "8"], @io_interface_stub)
     computer_player = CommandLineGames::Players::Computer.new(@io_interface_stub)
-    computer_player.strategy = CommandLineGames::Strategy.new(board)
+    computer_player.strategy = CommandLineGames::Strategy.new(board, computer_player.symbol)
 
-    refute_equal computer_player.choice(@next_player), 4
+    refute_equal computer_player.choice, 4
   end
 
   def test_player_choice_human_1
     @io_interface_stub.input = "0"
 
-    assert_equal @humnan_player.choice(@next_player), "0"
+    assert_equal @humnan_player.choice, "0"
   end
 
   def test_player_choice_human_2
     @io_interface_stub.input = "1"
 
-    assert_equal @humnan_player.choice(@next_player), "1"
+    assert_equal @humnan_player.choice, "1"
   end 
 
   def test_handle_player_good_input_number
     @io_interface_stub.input = "1"
 
-    assert_equal @humnan_player.choice(@next_player), "1"
+    assert_equal @humnan_player.choice, "1"
   end
 
   def test_handle_player_bad_input_not_number
     @io_interface_stub.input = "x"
 
     assert_raises RuntimeError do 
-      @humnan_player.choice(@next_player)
+      @humnan_player.choice
     end
   end
 

@@ -5,7 +5,7 @@ module CommandLineGames
         super(io_interface)
       end
 
-      def choice(next_player)
+      def choice
         io_interface.show_input_options
         input = io_interface.waiting_for_input
         fail(Errors::HumanBadInput, 'Bad Input') if bad_input?(input)

@@ -16,6 +16,11 @@ module CommandLineGames
       @game_input_output = game_input_output
     end
 
+    def initialize_dup(other)
+      super(other)
+      @positions = other.positions.dup
+    end
+
     def draw
       game_input_output.draw_board(positions)
     end

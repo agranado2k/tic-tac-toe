@@ -12,8 +12,8 @@ module CommandLineGames
       "X"
     end
 
-    def choice(next_player)
-      strategy.get_best_move(symbol, next_player.symbol)
+    def choice
+      strategy.get_best_move(symbol)
     end
 
     def choose_name
@@ -23,7 +23,7 @@ module CommandLineGames
     def choose_strategy(board)
       @io_interface.choose_player_strategy
       strategy_type = @io_interface.waiting_for_input
-      @strategy = Strategy.create(board)
+      @strategy = Strategy.create(board, symbol, strategy_type)
     end
     
     def bad_input?(input)
