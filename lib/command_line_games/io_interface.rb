@@ -9,6 +9,9 @@ module CommandLineGames
       output "############    Tic Tac Toe    ###################"
       output "#### by Command Lines Games Inc. - March/2017 ####"
       output "##################################################"
+      output ""
+      output "Enter q any time to exit."
+      output ""
     end
 
     def board_template(board)
@@ -78,7 +81,12 @@ module CommandLineGames
     end
 
     def input
-      gets.chomp
+      tmp = gets.chomp
+      if tmp.upcase.match(/Q/)
+        output "Bye bye!"
+        exit(true)
+      end
+      tmp
     end
   end
 end
