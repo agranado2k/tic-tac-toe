@@ -24,7 +24,7 @@ module CommandLineGames
       elsif strategy_level == "H"
         Strategies::Hard.new(board, current_symbol)
       else
-        Strategies::Normal.new(board, current_symbol)
+        Strategies::Medium.new(board, current_symbol)
       end
     end
   end

@@ -37,7 +37,7 @@ module CommandLineGames
 
     def choose_player_strategy
       output "Difficulty level"
-      output "(E)asy - (N)ormal - (H)ard [default is N]:"
+      output "(E)asy - (M)edium - (H)ard [default is M]:"
     end
 
     def choose_player_symbol

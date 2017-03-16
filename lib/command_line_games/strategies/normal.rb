@@ -1,6 +1,6 @@
 module CommandLineGames
   module Strategies
-    class Normal < Strategy
+    class Medium < Strategy
       def get_best_move(current_player_symbol)
         return 4 if board.is_position_available?(4)
         available_spaces = board.availabel_positions
