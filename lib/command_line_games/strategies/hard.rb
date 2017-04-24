@@ -9,12 +9,12 @@ module CommandLineGames
       def minmax(local_board, current_player_symbol)
         return score(local_board) if local_board.someone_won_or_tied_game?
         scores = {}
-        scores.merge!(for_each_available_position_mark_position_and_call_minmax(local_board, current_player_symbol, scores))
+        scores.merge!(score_for_each_position(local_board, current_player_symbol, scores))
         best_choice, best_score = best_move(current_player_symbol, scores)
         return best_score, best_choice
       end
 
-      def for_each_available_position_mark_position_and_call_minmax(local_board, current_player_symbol, scores)
+      def score_for_each_position(local_board, current_player_symbol, scores)
         local_board.available_positions.each do |position|
           # Copy board so we don't mess up original
           potential_board = local_board.dup
