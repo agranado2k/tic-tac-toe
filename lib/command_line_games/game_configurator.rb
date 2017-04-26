@@ -2,33 +2,15 @@ module CommandLineGames
   module GameConfigurator
     SYMBOL_LIST = ["X","O"]
 
-    def setup_player_1(player)
-      player = create_player_1
-      player = configure_player(player)
+    def setup_player(player, number)
+      configure_player(create_player(number))
     rescue Errors::HumanBadInput
       io_interface.bad_input
-      player = setup_player_1(player)
-    ensure
-      player
+      setup_player(player)
     end
 
-    def create_player_1
-      @io_interface.for_player_1
-      create_player_by_type
-    end
-
-    def setup_player_2(player)
-      player = create_player_2
-      player = configure_player(player)
-    rescue Errors::HumanBadInput
-      io_interface.bad_input
-      player = setup_player_2(player)
-    ensure
-      player
-    end
-
-    def create_player_2
-      @io_interface.for_player_2
+    def create_player(number)
+      @io_interface.for_player(number)
       create_player_by_type
     end
 

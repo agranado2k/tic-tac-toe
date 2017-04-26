@@ -63,12 +63,8 @@ module CommandLineGames
       output "#{name} (#{symbol}) turn"
     end
 
-    def for_player_1
-      output "Player 1"
-    end
-
-    def for_player_2
-      output "Player 2"
+    def for_player(number)
+      output "Player #{number}"
     end
 
     def show_tied_game_message

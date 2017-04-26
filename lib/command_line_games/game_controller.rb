@@ -2,6 +2,8 @@
 module CommandLineGames
   class GameController
     include GameConfigurator
+    PLAYER_1 = 1
+    PLAYER_2 = 2
 
     attr_reader :io_interface, :board, :player_1, :player_2, :winner
     attr_accessor :symbols
@@ -25,10 +27,10 @@ module CommandLineGames
     end
 
     def setup_players
-      @player_1 = setup_player_1(@player_1)
-      @player_2 = setup_player_2(@player_2)
-      io_interface.player_setup(1, @player_1.name, @player_1.symbol)
-      io_interface.player_setup(2, @player_2.name, @player_2.symbol)
+      @player_1 = setup_player(@player_1, PLAYER_1)
+      @player_2 = setup_player(@player_2, PLAYER_2)
+      io_interface.player_setup(PLAYER_1, @player_1.name, @player_1.symbol)
+      io_interface.player_setup(PLAYER_2, @player_2.name, @player_2.symbol)
     end
 
     def remove_symbol_from_list(symbol)
