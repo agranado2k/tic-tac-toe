@@ -8,8 +8,8 @@ module CommandLineGames
       @io_interface = io_interface
     end
 
-    def choose_symbol
-      "X"
+    def choose_symbol(symbol_list)
+      @symbol = symbol_list.first
     end
 
     def choice
@@ -17,7 +17,7 @@ module CommandLineGames
     end
 
     def choose_name
-      @name = "Player"
+      @name = "Computer"
     end
 
     def choose_strategy(board)
