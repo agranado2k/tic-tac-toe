@@ -15,11 +15,15 @@ module CommandLineGames
     end
 
     def board_template(board)
-      " #{board[0]} | #{board[1]} | #{board[2]} \n===+===+===\n #{board[3]} | #{board[4]} | #{board[5]} \n===+===+===\n #{board[6]} | #{board[7]} | #{board[8]} \n"
+      " #{fill_cell(board[0])} | #{fill_cell(board[1])} | #{fill_cell(board[2])} \n===+===+===\n #{fill_cell(board[3])} | #{fill_cell(board[4])} | #{fill_cell(board[5])} \n===+===+===\n #{fill_cell(board[6])} | #{fill_cell(board[7])} | #{fill_cell(board[8])} \n"
+    end
+
+    def fill_cell(symbol)
+      symbol == "X" || symbol == "O" ? symbol : (symbol.to_i + 1) 
     end
 
     def show_input_options
-      output "Enter [0-8]:"
+      output "Enter [1-9]:"
     end
 
 

@@ -27,7 +27,7 @@ module CommandLineGames
     end
     
     def bad_input?(input)
-      input.match(/[^0-8]/)
+      input.match(/[^1-9]/)
     end
 
     def self.create_player(type, io_interface)

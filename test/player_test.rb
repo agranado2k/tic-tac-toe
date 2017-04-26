@@ -28,21 +28,21 @@ class PlayerTest < Minitest::Test
   end
 
   def test_player_choice_human_1
-    @io_interface_stub.input = "0"
+    @io_interface_stub.input = "1"
 
-    assert_equal @humnan_player.choice, "0"
+    assert_equal @humnan_player.choice, 0
   end
 
   def test_player_choice_human_2
-    @io_interface_stub.input = "1"
+    @io_interface_stub.input = "9"
 
-    assert_equal @humnan_player.choice, "1"
+    assert_equal @humnan_player.choice, 8
   end 
 
   def test_handle_player_good_input_number
     @io_interface_stub.input = "1"
 
-    assert_equal @humnan_player.choice, "1"
+    assert_equal @humnan_player.choice, 0
   end
 
   def test_handle_player_bad_input_not_number
