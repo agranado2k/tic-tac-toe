@@ -6,7 +6,7 @@ module CommandLineGames
       configure_player(create_player(number))
     rescue Errors::HumanBadInput
       io_interface.bad_input
-      setup_player(player)
+      setup_player(player, number)
     end
 
     def create_player(number)

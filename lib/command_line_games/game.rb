@@ -1,6 +1,6 @@
 
 module CommandLineGames
-  class GameController
+  class Game
     include GameConfigurator
     PLAYER_1 = 1
     PLAYER_2 = 2
