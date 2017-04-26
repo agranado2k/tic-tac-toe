@@ -38,7 +38,7 @@ module CommandLineGames
     def setup_and_draw_board
       io_interface.lets_play
       board.clean
-      board.draw
+      io_interface.draw_board(board.positions)
     end
 
     def play_game(board)
@@ -67,7 +67,7 @@ module CommandLineGames
 
     def mark_and_draw_postion_on_board(choice, symbol)
       board.mark_position(choice, symbol)
-      board.draw
+      io_interface.draw_board(board.positions)
     end
 
     def handle_bad_input(player, next_player)

@@ -14,18 +14,13 @@ module CommandLineGames
       [0, 4, 8], [2, 4, 6]
     ]
 
-    def initialize(board, game_input_output)
+    def initialize(board)
       @positions = board
-      @game_input_output = game_input_output
     end
 
     def initialize_dup(other)
       super(other)
       @positions = other.positions.dup
-    end
-
-    def draw
-      game_input_output.draw_board(positions)
     end
 
     def mark_position(spot, mark)

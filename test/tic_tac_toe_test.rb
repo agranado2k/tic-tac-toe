@@ -4,9 +4,9 @@ class GameTest < Minitest::Test
   include IoTestHelpers
 
   def setup
-    io_interface = CommandLineGames::IOInterface.new
-    board = CommandLineGames::Board.new(["0", "1", "2", "3", "4", "5", "6", "7", "8"], io_interface)
-    @subject = CommandLineGames::GameController.new(io_interface, board)
+    @io_interface = CommandLineGames::IOInterface.new
+    board = CommandLineGames::Board.new(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+    @subject = CommandLineGames::GameController.new(@io_interface, board)
   end
 
   def test_play_game_with_simple_sequence_0_1_3_to_lose_from_default_game_io
@@ -15,5 +15,14 @@ class GameTest < Minitest::Test
     assert_output output do
       simulate_stdin("H", "O", "Mr. Smith", "C", "N", "0", "1", "3") { @subject.start_game }
     end
+  end
+
+  def test_draw_the_board
+    @io_interface_stub = IOInterfaceStub.new
+    output = " 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n"
+
+    @io_interface_stub.draw_board(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+
+    assert_equal @io_interface_stub.content, output
   end
 end
