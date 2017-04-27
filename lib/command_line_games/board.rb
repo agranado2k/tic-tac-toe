@@ -16,15 +16,13 @@ module CommandLineGames
 
     def initialize(board)
       @positions = board
+      @positions.freeze
     end
-
-    def initialize_dup(other)
-      super(other)
-      @positions = other.positions.dup
-    end
-
+    
     def mark_position(spot, mark)
-      positions[spot] = mark
+      new_positions = positions.dup
+      new_positions[spot] = mark
+      Board.new(new_positions)
     end
 
     def available_positions

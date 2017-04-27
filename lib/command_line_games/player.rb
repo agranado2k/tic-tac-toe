@@ -12,7 +12,8 @@ module CommandLineGames
       @symbol = symbol_list.first
     end
 
-    def choice
+    def choice(board=:FIXME)
+      strategy.update_board(board)
       strategy.get_best_move(symbol)
     end
 
@@ -20,10 +21,10 @@ module CommandLineGames
       @name = "Computer"
     end
 
-    def choose_strategy(board)
+    def choose_strategy
       @io_interface.choose_player_strategy
       strategy_type = @io_interface.waiting_for_input
-      @strategy = Strategy.create(board, symbol, strategy_type)
+      @strategy = Strategy.create(symbol, strategy_type)
     end
     
     def bad_input?(input)

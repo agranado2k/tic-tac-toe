@@ -54,7 +54,7 @@ module CommandLineGames
     end
 
     def configure_player_strategy(player)
-      player.choose_strategy(board)
+      player.choose_strategy
     end
   end
 end

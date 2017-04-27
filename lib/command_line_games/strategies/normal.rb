@@ -24,14 +24,13 @@ module CommandLineGames
 
       def check_available_positions(available_spaces, player_symbol, board)
         possibilities = available_spaces.select do |as|
-          local_board = board.dup
-          check_best_move(as, local_board, player_symbol) 
+          check_best_move(as, board, player_symbol) 
         end
         possibilities.first
       end
 
-      def check_best_move(current_position, local_board, current_player_symbol)
-        local_board.positions[current_position.to_i] = current_player_symbol
+      def check_best_move(current_position, board, current_player_symbol)
+        local_board = board.mark_position(current_position.to_i, current_player_symbol)
         return current_position.to_i if local_board.someone_won?
         nil
       end

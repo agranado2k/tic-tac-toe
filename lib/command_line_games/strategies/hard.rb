@@ -16,9 +16,7 @@ module CommandLineGames
 
       def score_for_each_position(local_board, current_player_symbol, scores)
         local_board.available_positions.each do |position|
-          # Copy board so we don't mess up original
-          potential_board = local_board.dup
-          potential_board.mark_position(position, current_player_symbol)
+          potential_board = local_board.mark_position(position, current_player_symbol)
           scores[position], best_choice = minmax(potential_board, opponent(current_player_symbol))
         end
         scores

@@ -23,9 +23,10 @@ class BoardTest < Minitest::Test
   def test_set_board_position
     spot, mark = 4, "X"
 
-    @subject.mark_position(spot, mark)
+    new_board = @subject.mark_position(spot, mark)
 
-    assert_equal @subject.positions, ["0", "1", "2", "3", "X", "5", "6", "7", "8"]
+    assert_equal @subject.positions, ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+    assert_equal new_board.positions, ["0", "1", "2", "3", "X", "5", "6", "7", "8"]
   end
 
   def test_is_position_available_on_board_true
@@ -36,9 +37,10 @@ class BoardTest < Minitest::Test
 
   def test_is_position_available_on_board_false
     spot, mark = 4, "X"
-    @subject.mark_position(spot, mark)
+    new_board = @subject.mark_position(spot, mark)
 
-    assert_equal @subject.is_position_available?(spot), false
+    assert_equal @subject.is_position_available?(spot), true
+    assert_equal new_board.is_position_available?(spot), false
   end
 
   def test_available_positions

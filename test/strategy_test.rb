@@ -6,7 +6,8 @@ class BoardTest < Minitest::Test
     current_symbol = "X"
     tic_tac_toe_board = ["0", "1", "2", "3", "O", "5", "6", "7", "8"]
     board = CommandLineGames::Board.new(tic_tac_toe_board)
-    strategy = CommandLineGames::Strategies::Hard.new(board, current_symbol)
+    strategy = CommandLineGames::Strategies::Hard.new(current_symbol)
+    strategy.update_board(board)
 
     assert_equal strategy.get_best_move(current_symbol), 0
   end
@@ -15,7 +16,8 @@ class BoardTest < Minitest::Test
     current_symbol = "O"
     tic_tac_toe_board = ["X", "1", "X", "3", "4", "5", "O", "O", "8"]
     board = CommandLineGames::Board.new(tic_tac_toe_board)
-    strategy = CommandLineGames::Strategies::Hard.new(board, current_symbol)
+    strategy = CommandLineGames::Strategies::Hard.new(current_symbol)
+    strategy.update_board(board)
 
     assert_equal strategy.get_best_move(current_symbol), 1
   end
@@ -24,7 +26,8 @@ class BoardTest < Minitest::Test
     current_symbol = "O"
     tic_tac_toe_board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
     board = CommandLineGames::Board.new(tic_tac_toe_board)
-    strategy = CommandLineGames::Strategies::Easy.new(board, current_symbol)
+    strategy = CommandLineGames::Strategies::Easy.new(current_symbol)
+    strategy.update_board(board)
 
     assert_includes (0..8), strategy.get_best_move(current_symbol)
   end
@@ -33,7 +36,8 @@ class BoardTest < Minitest::Test
     current_symbol = "O"
     tic_tac_toe_board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
     board = CommandLineGames::Board.new(tic_tac_toe_board)
-    strategy = CommandLineGames::Strategies::Normal.new(board, current_symbol)
+    strategy = CommandLineGames::Strategies::Normal.new(current_symbol)
+    strategy.update_board(board)
 
     assert_equal strategy.get_best_move(current_symbol), 4
   end
@@ -42,7 +46,8 @@ class BoardTest < Minitest::Test
     current_symbol = "O"
     tic_tac_toe_board = ["0", "1", "2", "3", "X", "5", "6", "7", "8"]
     board = CommandLineGames::Board.new(tic_tac_toe_board)
-    strategy = CommandLineGames::Strategies::Normal.new(board, current_symbol)
+    strategy = CommandLineGames::Strategies::Normal.new(current_symbol)
+    strategy.update_board(board)
 
     refute_equal strategy.get_best_move(current_symbol), 4
   end

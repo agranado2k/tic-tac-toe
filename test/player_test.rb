@@ -16,7 +16,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_player_choice_computer_1
-    assert_equal @computer_player.choice, 4
+    assert_equal @computer_player.choice(@board), 4
   end
 
   def test_player_choice_computer_2
@@ -24,7 +24,7 @@ class PlayerTest < Minitest::Test
     computer_player = CommandLineGames::Players::Computer.new(@io_interface_stub)
     computer_player.strategy = CommandLineGames::Strategy.create(board, computer_player.symbol)
 
-    refute_equal computer_player.choice, 4
+    refute_equal computer_player.choice(board), 4
   end
 
   def test_player_choice_human_1

@@ -5,8 +5,8 @@ module CommandLineGames
     PLAYER_1 = 1
     PLAYER_2 = 2
 
-    attr_reader :io_interface, :board, :player_1, :player_2, :winner
-    attr_accessor :symbols
+    attr_reader :io_interface, :player_1, :player_2, :winner
+    attr_accessor :symbols, :board
 
     def initialize(io_interface, board)
       @board = board
@@ -18,7 +18,7 @@ module CommandLineGames
       introduction
       setup_players
       setup_and_draw_board
-      play_game(board)
+      play_game
       finish_game
     end
 
@@ -43,10 +43,10 @@ module CommandLineGames
       io_interface.draw_board(board.positions)
     end
 
-    def play_game(board)
-      until board.someone_won_or_tied_game?
+    def play_game
+      until @board.someone_won_or_tied_game?
         player_move(player_1, player_2)
-        break if board.someone_won_or_tied_game?
+        break if @board.someone_won_or_tied_game?
         player_move(player_2, player_1)
       end
     end
@@ -62,13 +62,13 @@ module CommandLineGames
 
     def handle_players_choice(player, next_player)
       io_interface.player_turn(player.name, player.symbol)
-      choice = player.choice.to_i
+      choice = player.choice(board).to_i
       position_is_not_available(choice)
       mark_and_draw_postion_on_board(choice.to_i, player.symbol)
     end
 
     def mark_and_draw_postion_on_board(choice, symbol)
-      board.mark_position(choice, symbol)
+      @board = board.mark_position(choice, symbol)
       io_interface.draw_board(board.positions)
     end
 
