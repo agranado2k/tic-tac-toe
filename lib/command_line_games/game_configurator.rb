@@ -4,7 +4,7 @@ module CommandLineGames
 
     def setup_player(player, number)
       configure_player(create_player(number))
-    rescue Errors::HumanBadInput
+    rescue Errors::BadInput
       io_interface.bad_input
       setup_player(player, number)
     end
@@ -22,7 +22,7 @@ module CommandLineGames
     def handle_user_input_to_create_player
       @io_interface.choose_player_type
       type = @io_interface.waiting_for_input
-      fail(Errors::HumanBadInput, 'Bad Input') unless type.upcase.match(/H|C/)
+      fail(Errors::BadInput, 'Bad Input') unless type.upcase.match(/H|C/)
       type
     end
     

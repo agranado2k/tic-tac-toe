@@ -8,14 +8,14 @@ module CommandLineGames
       def choice(board=nil)
         io_interface.show_input_options
         input = io_interface.waiting_for_input
-        fail(Errors::HumanBadInput, 'Bad Input') if bad_input?(input)
+        fail(Errors::BadInput, 'Bad Input') if bad_input?(input)
         (input.to_i) -1
       end
 
       def choose_symbol(symbol_list)
         @io_interface.choose_player_symbol
         @symbol = @io_interface.waiting_for_input
-        fail(Errors::HumanBadInput, 'Bad Input') unless symbol_list.include?(symbol.upcase)
+        fail(Errors::BadInput, 'Bad Input') unless symbol_list.include?(symbol.upcase)
         symbol
       end
 

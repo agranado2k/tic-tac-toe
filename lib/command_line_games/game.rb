@@ -54,7 +54,7 @@ module CommandLineGames
     def player_move(player, next_player)
       handle_players_choice(player, next_player)
       @winner = player
-    rescue Errors::HumanBadInput
+    rescue Errors::BadInput
       handle_bad_input(player, next_player)
     rescue Errors::PositionIsNotAvailable  
       handle_position_is_not_available(player, next_player)
