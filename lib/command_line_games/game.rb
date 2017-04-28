@@ -39,7 +39,7 @@ module CommandLineGames
     
     def setup_and_draw_board
       io_interface.lets_play
-      board.clean
+      @board = board.clean
       io_interface.draw_board(board.positions)
     end
 

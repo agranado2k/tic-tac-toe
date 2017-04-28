@@ -15,9 +15,9 @@ class BoardTest < Minitest::Test
   def test_clean_board
     board = CommandLineGames::Board.new(["0", "1", "O", "3", "X", "5", "X", "O", "8"])
 
-    board.clean
+    clean_board = board.clean
 
-    assert_equal board.positions, ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+    assert_equal clean_board.positions, ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
   end
 
   def test_set_board_position

@@ -38,7 +38,7 @@ module CommandLineGames
     end
 
     def someone_won?
-      winner
+      has_winning_combination?
     end
 
     def tied_game?
@@ -46,16 +46,27 @@ module CommandLineGames
     end
 
     def winner
-      combo = winning_combination
-      combo ? positions[combo[0]] : false
+      has_winning_combination? ? winner_symbol(winning_combination) : nil
+    end
+
+    def has_winning_combination?
+      !winning_combination.nil?
+    end
+
+    def winner_symbol(combination)
+      positions[combination[0]]
     end
 
     def winning_combination
-      WINNING_COMBINATIONS.select{|combo| positions[combo[0]] == positions[combo[1]] && positions[combo[1]] == positions[combo[2]]}.first
+      WINNING_COMBINATIONS.select{|combination| has_completed_combinantion?(combination) }.first
+    end
+
+    def has_completed_combinantion?(combination )
+      positions[combination[0]] == positions[combination[1]] && positions[combination[1]] == positions[combination[2]]
     end
 
     def clean
-      @positions = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+      Board.new(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
     end
   end
 end
