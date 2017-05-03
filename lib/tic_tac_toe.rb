@@ -13,6 +13,7 @@ require_relative "command_line_games/strategy"
 require_relative "command_line_games/strategies/easy"
 require_relative "command_line_games/strategies/normal"
 require_relative "command_line_games/strategies/hard"
+require_relative "command_line_games/strategies/ceara"
 require_relative "command_line_games/game_configurator"
 require_relative "command_line_games/game"
 
