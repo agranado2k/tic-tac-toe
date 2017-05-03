@@ -1,4 +1,4 @@
-module CommandLineGames  
+module CommandLineGames
   class IOInterface
     def introduction
       output "##################################################"
@@ -9,7 +9,7 @@ module CommandLineGames
       output "Enter q any time to exit."
       output ""
     end
-    
+
     def draw_board(board)
       output board_template(board)
     end
@@ -19,7 +19,7 @@ module CommandLineGames
     end
 
     def fill_cell(symbol)
-      symbol == "X" || symbol == "O" ? symbol : (symbol.to_i + 1) 
+      symbol == "X" || symbol == "O" ? symbol : (symbol.to_i + 1)
     end
 
     def show_input_options
@@ -41,7 +41,7 @@ module CommandLineGames
 
     def choose_player_strategy
       output "Difficulty level"
-      output "(E)asy - (N)ormal - (H)ard [default is N]:"
+      output "(E)asy - (N)ormal - (H)ard - (C)eara [default is N]:"
     end
 
     def choose_player_symbol

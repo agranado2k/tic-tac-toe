@@ -28,6 +28,8 @@ module CommandLineGames
         Strategies::Easy.new(current_symbol)
       elsif strategy_level == "H"
         Strategies::Hard.new(current_symbol)
+      elsif strategy_level == "C"
+        Strategies::Ceara.new(current_symbol)
       else
         Strategies::Normal.new(current_symbol)
       end
